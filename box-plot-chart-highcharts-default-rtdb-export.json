@@ -1,0 +1,32 @@
+[
+  {
+    "ExperimentNo": 1,
+    "Observations": 60.3,
+    "ts": 1622454396103
+  },
+  {
+    "ExperimentNo": 1,
+    "Observations": 18.7,
+    "ts": 1622454400117
+  },
+  {
+    "ExperimentNo": 1,
+    "Observations": 53,
+    "ts": 1622454404077
+  },
+  {
+    "ExperimentNo": 2,
+    "Observations": 17,
+    "ts": 1622454410749
+  },
+  {
+    "ExperimentNo": 2,
+    "Observations": 23,
+    "ts": 1622454445543
+  },
+  {
+    "ExperimentNo": 2,
+    "Observations": 17,
+    "ts": 1622454447133
+  }
+]
