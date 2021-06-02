@@ -1,0 +1,20 @@
+[
+  {
+    "adaptor": "firebase",
+    "firebase": {
+      "apiKey": "AIzaSyB_LYIn7AcWRJRHuHQqNRPY67B1IoPs3Bs",
+      "authDomain": "histgramhighcharts.firebaseapp.com",
+      "databaseURL": "https://histgramhighcharts-default-rtdb.firebaseio.com",
+      "projectId": "histgramhighcharts",
+      "storageBucket": "histgramhighcharts.appspot.com",
+      "messagingSenderId": "484947415965",
+      "appId": "1:484947415965:web:40e3e8f48b53df74cd9574",
+      "measurementId": "G-KSWZYMPHL8"
+    },
+    "limit": 1000,
+    "ref": "/",
+    "title": "firebase",
+    "id": "fireabse",
+    "name": "firebase"
+  }
+]
