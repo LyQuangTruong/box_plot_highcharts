@@ -7,15 +7,16 @@ var colData = [];
 var categoryX = [];
 var seriesData = [];
 var experimentNo = [];
-var observations = [];
-var experimentNoTemp = [];
-var observationsTemp = [];
+var sum = 0;
+var avg = 0;
+var x;
+var observations;
 
 BoxPlotHighCharts.defaultSettings = {
   HorizontalAxis: "value",
-  Legend: "Observations",
+  Legend: "ExperimentNo",
   Timestamp: "ts",
-  Title: "Box Plot Highcharts",
+  Title: "Highcharts Box Plot",
 };
 
 BoxPlotHighCharts.settings = EnebularIntelligence.SchemaProcessor(
@@ -46,7 +47,8 @@ function createBoxPlotHighCharts(that) {
     },
 
     xAxis: {
-      categories: experimentNo,
+      // categories: experimentNo,
+      // categories: ["1", "2"],
       title: {
         text: "Experiment No.",
       },
@@ -58,11 +60,11 @@ function createBoxPlotHighCharts(that) {
       },
       plotLines: [
         {
-          value: 932,
+          value: avg,
           color: "red",
           width: 1,
           label: {
-            text: "Theoretical mean: 932",
+            text: `Average  mean:  ${avg}`,
             align: "center",
             style: {
               color: "gray",
@@ -199,46 +201,24 @@ BoxPlotHighCharts.prototype.convertData = function () {
   this.refresh();
 };
 
-function unique(arr) {
-  var obj = {}
-  var newArr = []
-  for (let i = 0; i < arr.length; i++) {
-    if (!obj[arr[i]]) {
-      obj[arr[i]] = 1
-      newArr.push(arr[i])
-    }
-  }
-  return newArr
-}
-
 function ConvertDataAPI(that) {
   categoryX = [];
   seriesData = [];
-  experimentNoTemp = [];
-  observationsTemp = [];
   let temp = [];
   console.log("colData", colData);
-  colData.forEach(function (val, index) {
-    for (var i = 0; i < val.values.length; i++) {
-      console.log("val", i, ": ", val);
-      // if (colData[index]["values"][i]["ExperimentNo"] == val.key) {
-      //   console.log("Testing");
-      //   temp.push(colData[index]["values"][i]["Observations"]);
-
-
-      //   console.log("temp", temp);
-      // }
-
-      experimentNoTemp.push(colData[index]["values"][i]["ExperimentNo"]);
-      observationsTemp.push(colData[index]["values"][i]["Observations"]);
-      experimentNo.push(experimentNoTemp);
-      observations.push(observationsTemp);
-      // console.log("experimentNoTemp", experimentNoTemp);
-      console.log("observationsTemp", observationsTemp);
-      // console.log("experimentNo", experimentNo);
-      // console.log("observations", observations);
+  let x = colData;
+  observations = x.map((item) =>
+    item.values.map((subItem) => subItem.Observations).sort()
+  );
+  console.log("observations", observations);
+  x = observations;
+  for (let i = 0; i < x.length; i++) {
+    for (let j = 0; j < x.length; j++) {
+      sum += x[i][j];
+      console.log("sum", sum);
     }
-  });
+  }
+  avg = sum / (x.length * 5);
 }
 
 BoxPlotHighCharts.prototype.resize = function (options) {
@@ -270,7 +250,8 @@ BoxPlotHighCharts.prototype.refresh = function () {
       },
 
       xAxis: {
-        categories: experimentNo,
+        // categories: experimentNo,
+        // categories: ["1", "2"],
         title: {
           text: "Experiment No.",
         },
@@ -282,11 +263,12 @@ BoxPlotHighCharts.prototype.refresh = function () {
         },
         plotLines: [
           {
-            value: 932,
+            // Trung bình
+            value: avg,
             color: "red",
             width: 1,
             label: {
-              text: "Theoretical mean: 932",
+              text: "Theoretical mean: ", avg,
               align: "center",
               style: {
                 color: "gray",
