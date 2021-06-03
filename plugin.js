@@ -268,7 +268,7 @@ BoxPlotHighCharts.prototype.refresh = function () {
             color: "red",
             width: 1,
             label: {
-              text: "Theoretical mean: ", avg,
+              text: `Average  mean:  ${avg}`,
               align: "center",
               style: {
                 color: "gray",
