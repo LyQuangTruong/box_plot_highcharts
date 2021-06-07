@@ -6,10 +6,10 @@ require("highcharts/modules/accessibility")(Highcharts);
 var colData = [];
 var categoryX = [];
 var seriesData = [];
-var experimentNo = [];
+var experimentNo;
 var sum = 0;
 var avg = 0;
-var x;
+
 var observations;
 
 BoxPlotHighCharts.defaultSettings = {
@@ -47,8 +47,7 @@ function createBoxPlotHighCharts(that) {
     },
 
     xAxis: {
-      // categories: experimentNo,
-      // categories: ["1", "2"],
+      categories: experimentNo,
       title: {
         text: "Experiment No.",
       },
@@ -77,7 +76,13 @@ function createBoxPlotHighCharts(that) {
     series: [
       {
         name: "Observations",
-        data: observations,
+        data: [
+          [760, 801, 848, 895, 965],
+          [733, 853, 939, 980, 1080],
+          [714, 762, 817, 870, 918],
+          [724, 802, 806, 871, 950],
+          [834, 836, 864, 882, 910],
+        ],
         tooltip: {
           headerFormat: "<em>Experiment No {point.key}</em><br/>",
         },
@@ -88,6 +93,10 @@ function createBoxPlotHighCharts(that) {
         type: "scatter",
         data: [
           // x, y positions where 0 is the first category
+          [0, 644],
+          [4, 718],
+          [4, 951],
+          [4, 969],
         ],
         marker: {
           fillColor: "white",
@@ -201,6 +210,13 @@ function ConvertDataAPI(that) {
   seriesData = [];
   let temp = [];
   let x = colData;
+
+  experimentNo =x.map((item) => {
+    return item.key;
+  });
+
+  console.log("colData: ", colData);
+  console.log("experimentNo: ", experimentNo);
   observations = x.map((item) =>
     item.values.map((subItem) => subItem.Observations).sort()
   );
@@ -242,8 +258,7 @@ BoxPlotHighCharts.prototype.refresh = function () {
       },
 
       xAxis: {
-        // categories: experimentNo,
-        // categories: ["1", "2"],
+        categories: experimentNo,
         title: {
           text: "Experiment No.",
         },
@@ -273,7 +288,13 @@ BoxPlotHighCharts.prototype.refresh = function () {
       series: [
         {
           name: "Observations",
-          data: observations,
+          data: [
+            [760, 801, 848, 895, 965],
+            [733, 853, 939, 980, 1080],
+            [714, 762, 817, 870, 918],
+            [724, 802, 806, 871, 950],
+            [834, 836, 864, 882, 910],
+          ],
           tooltip: {
             headerFormat: "<em>Experiment No {point.key}</em><br/>",
           },
@@ -284,6 +305,10 @@ BoxPlotHighCharts.prototype.refresh = function () {
           type: "scatter",
           data: [
             // x, y positions where 0 is the first category
+            [0, 644],
+            [4, 718],
+            [4, 951],
+            [4, 969],
           ],
           marker: {
             fillColor: "white",
