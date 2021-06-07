@@ -6,7 +6,7 @@
     "HorizontalAxis": "humidity",
     "MaxH": "100",
     "MinH": "0",
-    "Legend": "Place",
+    "Legend": "ExperimentNo",
     "Timestamp": "ts",
     "Limit": "100",
     "Format": "YYYY/MM/DD",

@@ -75,13 +75,6 @@ function createBoxPlotHighCharts(that) {
     series: [
       {
         name: "Observations",
-        // data: [
-        //   [2.85, 2.63, 2.36, 2.23, 2.22],
-        //   [3.31, 2.45, 2.44, 2.13, 2.08],
-        //   [3.48, 2.36, 2.23, 2.14, 1.99],
-        //   [2.75, 2.71, 2.63, 2.15, 2.09],
-        //   [2.68, 2.19, 2.09, 2.02, 1.97],
-        // ],
         data: seriesData,
         tooltip: {
           headerFormat: "<em>Experiment No {point.key}</em><br/>",
@@ -209,7 +202,6 @@ function ConvertDataAPI(that) {
   categoryX = [];
   seriesData = [];
   observations = [];
-  let temp = [];
   let x = colData;
 
   experimentNo = x.map((item) => {
@@ -221,13 +213,10 @@ function ConvertDataAPI(that) {
     for (let index = 0; index < 5; index++) {
       z.push(item.values[index].Observations);
     }
-    return z;
+    return z.sort();
   });
+  console.log("seriesData", seriesData);
 
-  console.log("observations: ", observations);
-  observations = x.map((item) =>
-    item.values.map((subItem) => subItem.Observations).sort()
-  );
   x = observations;
   for (let i = 0; i < x.length; i++) {
     for (let j = 0; j < x.length; j++) {
@@ -296,13 +285,6 @@ BoxPlotHighCharts.prototype.refresh = function () {
       series: [
         {
           name: "Observations",
-          // data: [
-          //   [2.85, 2.63, 2.36, 2.23, 2.22],
-          //   [3.31, 2.45, 2.44, 2.13, 2.08],
-          //   [3.48, 2.36, 2.23, 2.14, 1.99],
-          //   [2.75, 2.71, 2.63, 2.15, 2.09],
-          //   [2.68, 2.19, 2.09, 2.02, 1.97],
-          // ],
           data: seriesData,
           tooltip: {
             headerFormat: "<em>Experiment No {point.key}</em><br/>",
