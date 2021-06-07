@@ -6,16 +6,16 @@ require("highcharts/modules/accessibility")(Highcharts);
 var colData = [];
 var categoryX = [];
 var seriesData = [];
-var experimentNo = [];
+var experimentNo;
 var observations = [];
-var experimentNoTemp = [];
-var observationsTemp = [];
+var sum = 0;
+var avg = 0;
 
 BoxPlotHighCharts.defaultSettings = {
   HorizontalAxis: "value",
-  Legend: "Observations",
+  Legend: "ExperimentNo",
   Timestamp: "ts",
-  Title: "Box Plot Highcharts",
+  Title: "Highcharts Box Plot",
 };
 
 BoxPlotHighCharts.settings = EnebularIntelligence.SchemaProcessor(
@@ -58,11 +58,11 @@ function createBoxPlotHighCharts(that) {
       },
       plotLines: [
         {
-          value: 932,
+          value: avg,
           color: "red",
           width: 1,
           label: {
-            text: "Theoretical mean: 932",
+            text: `Average  mean:  ${avg}`,
             align: "center",
             style: {
               color: "gray",
@@ -75,7 +75,7 @@ function createBoxPlotHighCharts(that) {
     series: [
       {
         name: "Observations",
-        data: observations,
+        data: seriesData,
         tooltip: {
           headerFormat: "<em>Experiment No {point.key}</em><br/>",
         },
@@ -84,9 +84,7 @@ function createBoxPlotHighCharts(that) {
         name: "Outliers",
         color: Highcharts.getOptions().colors[0],
         type: "scatter",
-        data: [
-          // x, y positions where 0 is the first category
-        ],
+        data: [],
         marker: {
           fillColor: "white",
           lineWidth: 1,
@@ -139,11 +137,6 @@ BoxPlotHighCharts.prototype.addData = function (data) {
     this.filteredData = data
       .filter((d) => {
         let hasLabel = d.hasOwnProperty("ExperimentNo");
-        const dLabel = d["ExperimentNo"];
-        if (typeof dLabel !== "number") {
-          fireError("VerticalAxis is not a number");
-          hasLabel = false;
-        }
         return hasLabel;
       })
       .filter((d) => {
@@ -199,46 +192,32 @@ BoxPlotHighCharts.prototype.convertData = function () {
   this.refresh();
 };
 
-function unique(arr) {
-  var obj = {}
-  var newArr = []
-  for (let i = 0; i < arr.length; i++) {
-    if (!obj[arr[i]]) {
-      obj[arr[i]] = 1
-      newArr.push(arr[i])
-    }
-  }
-  return newArr
-}
-
 function ConvertDataAPI(that) {
   categoryX = [];
   seriesData = [];
-  experimentNoTemp = [];
-  observationsTemp = [];
-  let temp = [];
-  console.log("colData", colData);
-  colData.forEach(function (val, index) {
-    for (var i = 0; i < val.values.length; i++) {
-      console.log("val", i, ": ", val);
-      // if (colData[index]["values"][i]["ExperimentNo"] == val.key) {
-      //   console.log("Testing");
-      //   temp.push(colData[index]["values"][i]["Observations"]);
+  observations = [];
+  let x = colData;
 
-
-      //   console.log("temp", temp);
-      // }
-
-      experimentNoTemp.push(colData[index]["values"][i]["ExperimentNo"]);
-      observationsTemp.push(colData[index]["values"][i]["Observations"]);
-      experimentNo.push(experimentNoTemp);
-      observations.push(observationsTemp);
-      // console.log("experimentNoTemp", experimentNoTemp);
-      console.log("observationsTemp", observationsTemp);
-      // console.log("experimentNo", experimentNo);
-      // console.log("observations", observations);
-    }
+  experimentNo = x.map((item) => {
+    return item.key;
   });
+
+  seriesData = x.map((item) => {
+    let z = [];
+    for (let index = 0; index < 5; index++) {
+      z.push(item.values[index].Observations);
+    }
+    return z.sort();
+  });
+  console.log("seriesData", seriesData);
+
+  x = observations;
+  for (let i = 0; i < x.length; i++) {
+    for (let j = 0; j < x.length; j++) {
+      sum += x[i][j];
+    }
+  }
+  avg = sum / (x.length * 5);
 }
 
 BoxPlotHighCharts.prototype.resize = function (options) {
@@ -282,11 +261,12 @@ BoxPlotHighCharts.prototype.refresh = function () {
         },
         plotLines: [
           {
-            value: 932,
+            // Trung bình
+            value: avg,
             color: "red",
             width: 1,
             label: {
-              text: "Theoretical mean: 932",
+              text: `Average  mean:  ${avg}`,
               align: "center",
               style: {
                 color: "gray",
@@ -299,7 +279,7 @@ BoxPlotHighCharts.prototype.refresh = function () {
       series: [
         {
           name: "Observations",
-          data: observations,
+          data: seriesData,
           tooltip: {
             headerFormat: "<em>Experiment No {point.key}</em><br/>",
           },
@@ -308,9 +288,7 @@ BoxPlotHighCharts.prototype.refresh = function () {
           name: "Outliers",
           color: Highcharts.getOptions().colors[0],
           type: "scatter",
-          data: [
-            // x, y positions where 0 is the first category
-          ],
+          data: [],
           marker: {
             fillColor: "white",
             lineWidth: 1,
