@@ -7,10 +7,9 @@ var colData = [];
 var categoryX = [];
 var seriesData = [];
 var experimentNo;
+var observations = [];
 var sum = 0;
 var avg = 0;
-
-var observations;
 
 BoxPlotHighCharts.defaultSettings = {
   HorizontalAxis: "value",
@@ -76,13 +75,14 @@ function createBoxPlotHighCharts(that) {
     series: [
       {
         name: "Observations",
-        data: [
-          [760, 801, 848, 895, 965],
-          [733, 853, 939, 980, 1080],
-          [714, 762, 817, 870, 918],
-          [724, 802, 806, 871, 950],
-          [834, 836, 864, 882, 910],
-        ],
+        // data: [
+        //   [2.85, 2.63, 2.36, 2.23, 2.22],
+        //   [3.31, 2.45, 2.44, 2.13, 2.08],
+        //   [3.48, 2.36, 2.23, 2.14, 1.99],
+        //   [2.75, 2.71, 2.63, 2.15, 2.09],
+        //   [2.68, 2.19, 2.09, 2.02, 1.97],
+        // ],
+        data: seriesData,
         tooltip: {
           headerFormat: "<em>Experiment No {point.key}</em><br/>",
         },
@@ -93,10 +93,10 @@ function createBoxPlotHighCharts(that) {
         type: "scatter",
         data: [
           // x, y positions where 0 is the first category
-          [0, 644],
-          [4, 718],
-          [4, 951],
-          [4, 969],
+          [0, 0.202],
+          [4, 0.718],
+          [4, 0.951],
+          [4, 0.969],
         ],
         marker: {
           fillColor: "white",
@@ -208,15 +208,23 @@ BoxPlotHighCharts.prototype.convertData = function () {
 function ConvertDataAPI(that) {
   categoryX = [];
   seriesData = [];
+  observations = [];
   let temp = [];
   let x = colData;
 
-  experimentNo =x.map((item) => {
+  experimentNo = x.map((item) => {
     return item.key;
   });
 
-  console.log("colData: ", colData);
-  console.log("experimentNo: ", experimentNo);
+  seriesData = x.map((item) => {
+    let z = [];
+    for (let index = 0; index < 5; index++) {
+      z.push(item.values[index].Observations);
+    }
+    return z;
+  });
+
+  console.log("observations: ", observations);
   observations = x.map((item) =>
     item.values.map((subItem) => subItem.Observations).sort()
   );
@@ -288,13 +296,14 @@ BoxPlotHighCharts.prototype.refresh = function () {
       series: [
         {
           name: "Observations",
-          data: [
-            [760, 801, 848, 895, 965],
-            [733, 853, 939, 980, 1080],
-            [714, 762, 817, 870, 918],
-            [724, 802, 806, 871, 950],
-            [834, 836, 864, 882, 910],
-          ],
+          // data: [
+          //   [2.85, 2.63, 2.36, 2.23, 2.22],
+          //   [3.31, 2.45, 2.44, 2.13, 2.08],
+          //   [3.48, 2.36, 2.23, 2.14, 1.99],
+          //   [2.75, 2.71, 2.63, 2.15, 2.09],
+          //   [2.68, 2.19, 2.09, 2.02, 1.97],
+          // ],
+          data: seriesData,
           tooltip: {
             headerFormat: "<em>Experiment No {point.key}</em><br/>",
           },
@@ -305,10 +314,10 @@ BoxPlotHighCharts.prototype.refresh = function () {
           type: "scatter",
           data: [
             // x, y positions where 0 is the first category
-            [0, 644],
-            [4, 718],
-            [4, 951],
-            [4, 969],
+            [0, 0.202],
+            [4, 0.718],
+            [4, 0.951],
+            [4, 0.969],
           ],
           marker: {
             fillColor: "white",
