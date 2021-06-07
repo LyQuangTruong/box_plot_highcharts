@@ -141,11 +141,6 @@ BoxPlotHighCharts.prototype.addData = function (data) {
     this.filteredData = data
       .filter((d) => {
         let hasLabel = d.hasOwnProperty("ExperimentNo");
-        const dLabel = d["ExperimentNo"];
-        if (typeof dLabel !== "number") {
-          fireError("VerticalAxis is not a number");
-          hasLabel = false;
-        }
         return hasLabel;
       })
       .filter((d) => {
@@ -205,17 +200,14 @@ function ConvertDataAPI(that) {
   categoryX = [];
   seriesData = [];
   let temp = [];
-  console.log("colData", colData);
   let x = colData;
   observations = x.map((item) =>
     item.values.map((subItem) => subItem.Observations).sort()
   );
-  console.log("observations", observations);
   x = observations;
   for (let i = 0; i < x.length; i++) {
     for (let j = 0; j < x.length; j++) {
       sum += x[i][j];
-      console.log("sum", sum);
     }
   }
   avg = sum / (x.length * 5);
