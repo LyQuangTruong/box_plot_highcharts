@@ -84,13 +84,7 @@ function createBoxPlotHighCharts(that) {
         name: "Outliers",
         color: Highcharts.getOptions().colors[0],
         type: "scatter",
-        data: [
-          // x, y positions where 0 is the first category
-          [0, 0.202],
-          [4, 0.718],
-          [4, 0.951],
-          [4, 0.969],
-        ],
+        data: [],
         marker: {
           fillColor: "white",
           lineWidth: 1,
@@ -294,13 +288,7 @@ BoxPlotHighCharts.prototype.refresh = function () {
           name: "Outliers",
           color: Highcharts.getOptions().colors[0],
           type: "scatter",
-          data: [
-            // x, y positions where 0 is the first category
-            [0, 0.202],
-            [4, 0.718],
-            [4, 0.951],
-            [4, 0.969],
-          ],
+          data: [],
           marker: {
             fillColor: "white",
             lineWidth: 1,
