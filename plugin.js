@@ -146,7 +146,6 @@ BoxPlotHighCharts.prototype.addData = function (data) {
 
     this.filteredData = data
       .filter((d) => {
-        console.log("that.settings.Legend: ", that.settings.Legend);
         let hasLabel = d.hasOwnProperty(that.settings.Legend);
         return hasLabel;
       })
@@ -208,7 +207,6 @@ function ConvertDataAPI(that) {
   seriesData = [];
   observations = [];
   let x = colData;
-  console.log("colData: ", colData);
 
   experimentNo = x.map((item) => {
     return item.key;
@@ -239,11 +237,8 @@ function ConvertDataAPI(that) {
     vz.push(maximum);
     vz.sort();
 
-    console.log("vz", vz);
     return vz;
   });
-
-  console.log("seriesData:", seriesData);
 
   x = observations;
   for (let i = 0; i < x.length; i++) {
