@@ -120,6 +120,7 @@ function BoxPlotHighCharts(settings, options) {
 }
 
 BoxPlotHighCharts.prototype.addData = function (data) {
+  console.log("data: ", data);
   var that = this;
   function fireError(err) {
     if (that.errorCallback) {
@@ -197,19 +198,47 @@ function ConvertDataAPI(that) {
   seriesData = [];
   observations = [];
   let x = colData;
+  console.log("colData: ", colData);
 
   experimentNo = x.map((item) => {
     return item.key;
   });
 
-  seriesData = x.map((item) => {
-    let z = [];
-    for (let index = 0; index < 5; index++) {
-      z.push(item.values[index].Observations);
+  seriesData = colData.map((item) => {
+    let vz = [];
+    let v = item.values.map((subItem) => subItem.Observations).sort();
+    let minimum = v[0];
+    let maximum = v[v.length - 1];
+
+    // Trung vị
+    let medianIndex = Math.round(v.length / 2);
+    var medianValue;
+    if (v.length % 2 == 0) {
+      /** số chẵn */
+      medianValue = (v[medianIndex] + v[medianIndex + 1]) / 2;
+      console.log("medianValue", medianValue);
+    } else {
+      /** số lẻ */
+      medianValue = v[medianIndex];
+      console.log("medianValue", medianValue);
     }
-    return z.sort();
+
+    let firstQuartile = (maximum - minimum) * 0.25;
+
+    let thirdQuartile = (maximum - minimum) * 0.75;
+
+    vz.push(minimum);
+    vz.push(firstQuartile);
+    vz.push(medianValue);
+    vz.push(thirdQuartile);
+    vz.push(maximum);
+    vz.sort();
+
+    console.log("vz", vz);
+    return vz;
   });
-  console.log("seriesData", seriesData);
+
+  console.log("seriesData:", seriesData);
 
   x = observations;
   for (let i = 0; i < x.length; i++) {
