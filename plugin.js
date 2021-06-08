@@ -14,6 +14,7 @@ var avg = 0;
 BoxPlotHighCharts.defaultSettings = {
   HorizontalAxis: "value",
   Legend: "ExperimentNo",
+  Observations: "Observations",
   Timestamp: "ts",
   Title: "Highcharts Box Plot",
 };
@@ -23,6 +24,14 @@ BoxPlotHighCharts.settings = EnebularIntelligence.SchemaProcessor(
     {
       type: "text",
       name: "Title",
+    },
+    {
+      type: "text",
+      name: "Legend",
+    },
+    {
+      type: "text",
+      name: "Observations",
     },
   ],
   BoxPlotHighCharts.defaultSettings
@@ -48,13 +57,13 @@ function createBoxPlotHighCharts(that) {
     xAxis: {
       categories: experimentNo,
       title: {
-        text: "Experiment No.",
+        text: that.settings.Legend,
       },
     },
 
     yAxis: {
       title: {
-        text: "Observations",
+        text: that.settings.Observations,
       },
       plotLines: [
         {
@@ -120,7 +129,6 @@ function BoxPlotHighCharts(settings, options) {
 }
 
 BoxPlotHighCharts.prototype.addData = function (data) {
-  console.log("data: ", data);
   var that = this;
   function fireError(err) {
     if (that.errorCallback) {
@@ -131,18 +139,20 @@ BoxPlotHighCharts.prototype.addData = function (data) {
   }
 
   if (data instanceof Array) {
+    console.log("data: ", data);
     var value = this.settings.HorizontalAxis;
     var legend = this.settings.Legend;
     var ts = this.settings.Timestamp;
 
     this.filteredData = data
       .filter((d) => {
-        let hasLabel = d.hasOwnProperty("ExperimentNo");
+        console.log("that.settings.Legend: ", that.settings.Legend);
+        let hasLabel = d.hasOwnProperty(that.settings.Legend);
         return hasLabel;
       })
       .filter((d) => {
-        let hasLabel = d.hasOwnProperty("Observations");
-        const dLabel = d["Observations"];
+        let hasLabel = d.hasOwnProperty(that.settings.Observations);
+        const dLabel = d[that.settings.Observations];
         if (typeof dLabel !== "number") {
           fireError("VerticalAxis is not a number");
           hasLabel = false;
@@ -206,21 +216,16 @@ function ConvertDataAPI(that) {
 
   seriesData = colData.map((item) => {
     let vz = [];
-    let v = item.values.map((subItem) => subItem.Observations).sort();
+    let v = item.values.map((subItem) => subItem[that.settings.Observations]).sort();
     let minimum = v[0];
     let maximum = v[v.length - 1];
 
-    // Trung vị
     let medianIndex = Math.round(v.length / 2);
     var medianValue;
     if (v.length % 2 == 0) {
-      /** số chẵn */
       medianValue = (v[medianIndex] + v[medianIndex + 1]) / 2;
-      console.log("medianValue", medianValue);
     } else {
-      /** số lẻ */
       medianValue = v[medianIndex];
-      console.log("medianValue", medianValue);
     }
 
     let firstQuartile = (maximum - minimum) * 0.25;
@@ -280,17 +285,16 @@ BoxPlotHighCharts.prototype.refresh = function () {
       xAxis: {
         categories: experimentNo,
         title: {
-          text: "Experiment No.",
+          text: that.settings.Legend,
         },
       },
 
       yAxis: {
         title: {
-          text: "Observations",
+          text: that.settings.Observations,
         },
         plotLines: [
           {
-            // Trung bình
             value: avg,
             color: "red",
             width: 1,
